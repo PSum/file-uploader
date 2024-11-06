@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -8,7 +9,7 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.fieldname + '-' + uniqueSuffix)
+    cb(null, file.fieldname + '-' + uniqueSuffix + '.png')
   }
 })
 
@@ -20,6 +21,11 @@ app.get('/', (req, res) => {
 
 app.post('/api/upload', upload.single('example-picture'), (req, res) => {
     res.json(req.file);
+})
+
+app.get('/api/getPicture', (req, res) =>{
+  const filePath = path.join(__dirname, '../uploads/example-picture-1730909983941-749054028.png')
+  res.sendFile(filePath);
 })
 
 const port = process.env.PORT || 3000;
