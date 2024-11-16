@@ -13,18 +13,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id String @id @default(uuid()) 
-  name String
-  entry Entry[]
-}
-
 model Entry {
- id String @id @default(uuid()) 
+ id Int @id @default(autoincrement()) 
  name String
- author User @relation(fields: [authorId], references: [id])
- authorId String
- parentId  String?  // Optional to allow root entries without a parent
+ parentId  Int?  // Optional to allow root entries without a parent
  parent    Entry?   @relation("ParentChild", fields: [parentId], references: [id]) // Parent Entry reference
  children  Entry[]  @relation("ParentChild") // Child Entries reference
  type Type @default(FILE)
