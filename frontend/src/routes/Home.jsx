@@ -25,16 +25,22 @@ async function fetchData () {
 function Contents ({ entries, fetchData }) {
   useEffect(() => {
     fetchData()
+  }, [])
     const data =  entries.map((entry) => {
       return (
-        (`hallo ${entry.name}`)
+      <div>
+        <div>
+        Name of entry: {entry.name}
+</div>
+<div>
+        Type of entry: {entry.type}
+</div>
+        </div>
       )
     })
-    console.log(entries);
     console.log(data);
-  }, [])
 
   return (
-    <div>Contents component</div>
+    <div>{data}</div>
   )
 }
