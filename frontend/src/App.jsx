@@ -2,6 +2,7 @@ import { Routes, Route, Outlet, Link } from "react-router-dom";
 import Home from './routes/Home';
 import About from './routes/About';
 import NoMatch from './routes/noMatch';
+import './App.css'
 
 export default function App() {
   return (
