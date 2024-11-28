@@ -3,42 +3,42 @@ import { useState, useEffect } from 'react';
 import fileImage from '../images/document.png'
 import folderImage from '../images/folder.png'
 
+// Home Component
 export default function Home() {
   const [entries, setEntries] = useState([]);
 
-
-async function fetchData () {
-        try {
-            const { data } = await axios.get('http://localhost:3000/api/items/home', )
-            setEntries(data);
-            console.log('Data fetched succesfull')
-        } catch (error) {
-            console.error('Error accessing protected route:', error);
-        }
-    } 
-
+  // Fetch data from the API
+  async function fetchData() {
+    try {
+      const { data } = await axios.get('http://localhost:3000/api/items/home');
+      setEntries(data);
+    } catch (error) {
+      console.error('Error accessing protected route:', error);
+    }
+  }
 
   return (
-    <div>
-      <Contents entries={entries} fetchData={fetchData} blockEntry={BlockEntry}></Contents>
-    </div>
+    <>
+      <Contents entries={entries} fetchData={fetchData} />
+    </>
   );
-
 }
 
+// BlockEntry Component
+function BlockEntry({ fileType }) {
+  let imageSrc;
 
-  function BlockEntry ({ fileType }) {
-    let imageSrc;
-    switch(fileType) {
-      case 'FILE':
-        imageSrc = fileImage;
-        break;
-      case 'Folder':
-        imageSrc = folderImage;
-        break;
-      default:
-        imageSrc = null;
-    }
+  switch (fileType) {
+    case 'FILE':
+      imageSrc = fileImage;
+      break;
+    case 'FOLDER':
+      imageSrc = folderImage;
+      break;
+    default:
+      imageSrc = null;
+  }
+
   return (
     <div>
       {imageSrc ? (
@@ -48,25 +48,22 @@ async function fetchData () {
       )}
     </div>
   );
-  }
+}
 
-function Contents ({ entries, fetchData, BlockEntry }) {
+// Contents Component
+function Contents({ entries, fetchData }) {
   useEffect(() => {
-    fetchData()
-  }, [])
-    const data =  entries.map((entry) => {
-      return (
-        <div key={entry.key}>
-          <div>Name of entry: {entry.name}</div>
-          <div>
-            <BlockEntry fileType={entry.type}></BlockEntry>
-          </div>
-        </div>
-      );
-    })
-    console.log(data);
+    fetchData();
+  }, [fetchData]); // Include fetchData in dependency array
 
   return (
-    <div>{data}</div>
-  )
+    <>
+      {entries.map((entry) => (
+        <div className='entry' key={entry.id}>
+          <BlockEntry fileType={entry.type} />
+          <div>Name of entry: {entry.name}</div>
+        </div>
+      ))}
+    </>
+  );
 }

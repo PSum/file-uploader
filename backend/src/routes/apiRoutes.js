@@ -16,7 +16,7 @@ router.get('/items/home', async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).send('There has been an error')
+    res.status(500).send('There has been an error' + err)
   }
 })
 
@@ -78,7 +78,7 @@ router.post('/items', async (req, res) => {
     const data = await prisma.entry.create({
       data: {
         name: name,
-        parentId: Number(parentId),
+        parentId: parentId,
         type: type,
       }
     })

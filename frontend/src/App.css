@@ -1,9 +1,10 @@
-* {
-    background-color: grey;
-}
-
 ul {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+
+.entry {
+    display: flex;
+    align-items: center;
 }
