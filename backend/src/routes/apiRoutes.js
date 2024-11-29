@@ -23,31 +23,31 @@ router.get('/items/home', async (req, res) => {
 // GET /items/:parentId
 // Response: [{ id, name, type, parentId, createdAt }]
 
+// router.get('/items/:parentId', async (req, res) => {
+//   try {
+//   const  params  = req.params
+//   console.log(`params: ${params.parentId}`);
+//   // Find entrys with entry name in DB and return them
+//   const data = await prisma.entry.findMany({
+//     where: {
+//       id: parseInt(params.parentId, 10)
+//     }
+//   });
+//   // Handle case where no entries are found
+//   if (data.length === 0) {
+//     return res.status(404).send({ message: 'No entries found for the given id.' });
+//   }
+
+//   res.status(200).send(data);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).send('There has been an error')
+//   }
+// })
+
 router.get('/items/:parentId', async (req, res) => {
   try {
-  const  params  = req.params
-  console.log(`params: ${params.parentId}`);
-  // Find entrys with entry name in DB and return them
-  const data = await prisma.entry.findMany({
-    where: {
-      id: parseInt(params.parentId, 10)
-    }
-  });
-  // Handle case where no entries are found
-  if (data.length === 0) {
-    return res.status(404).send({ message: 'No entries found for the given id.' });
-  }
-
-  res.status(200).send(data);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send('There has been an error')
-  }
-})
-
-router.get('/items/:parentId/children', async (req, res) => {
-  try {
-    const parentId = Number(req.params.parentId);
+    const parentId = parseInt(req.params.parentId, 10);
 
     console.log(`Fetching children for parentId: ${parentId}`);
 
@@ -57,9 +57,9 @@ router.get('/items/:parentId/children', async (req, res) => {
       },
     });
 
-    if (children.length === 0) {
-      return res.status(404).json({ message: 'No child entries found for the given parent ID.' });
-    }
+    // if (children.length === 0) {
+    //   return res.status(404).json({ message: 'No child entries found for the given parent ID.' });
+    // }
 
     res.status(200).json(children);
   } catch (err) {

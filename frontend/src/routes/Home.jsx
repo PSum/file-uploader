@@ -1,3 +1,4 @@
+// Add function to "Home"-Button to go back to the home-level of files
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import fileImage from '../images/document.png'
@@ -10,7 +11,7 @@ export default function Home() {
   // Fetch data from the API
   async function fetchData() {
     try {
-      const { data } = await axios.get('http://localhost:3000/api/items/home');
+      const { data } = await axios.get(`http://localhost:3000/api/items/home`);
       setEntries(data);
     } catch (error) {
       console.error('Error accessing protected route:', error);
@@ -19,7 +20,7 @@ export default function Home() {
 
   return (
     <>
-      <Contents entries={entries} fetchData={fetchData} />
+      <Contents setEntries={setEntries} entries={entries} fetchData={fetchData} />
     </>
   );
 }
@@ -51,19 +52,36 @@ function BlockEntry({ fileType }) {
 }
 
 // Contents Component
-function Contents({ entries, fetchData }) {
+function Contents({ setEntries, entries, fetchData }) {
   useEffect(() => {
     fetchData();
-  }, [fetchData]); // Include fetchData in dependency array
+  }, []); 
 
   return (
     <>
       {entries.map((entry) => (
-        <div className='entry' key={entry.id}>
+        <div onClick={() => changeAddress(entry, setEntries)} className='entry' key={entry.id}>
           <BlockEntry fileType={entry.type} />
           <div>Name of entry: {entry.name}</div>
         </div>
       ))}
-    </>
+    </> 
   );
+}
+
+async function changeAddress( entry, setEntries ) {
+  if (entry.type == "FOLDER") {
+    try {
+      console.log(entry.id)
+      const { data } = await axios.get(`http://localhost:3000/api/items/${entry.id}`);
+      setEntries(data);
+    } catch (error) {
+      console.error('Error accessing protected route:', error);
+    }
+
+    // setEntries([])
+  }
+  else {
+    console.log("not folder")
+  }
 }
