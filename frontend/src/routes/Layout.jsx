@@ -1,3 +1,5 @@
+import fetchData from '../api/fetchData'
+
 export default function Layout() {
   return (
     <div>

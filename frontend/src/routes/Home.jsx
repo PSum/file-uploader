@@ -3,21 +3,25 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import fileImage from '../images/document.png'
 import folderImage from '../images/folder.png'
+import fetchData from '../api/fetchData.jsx'
 
 // Home Component
 export default function Home() {
   const [entries, setEntries] = useState([]);
 
   // Fetch data from the API
-  async function fetchData() {
-    try {
-      const { data } = await axios.get(`http://localhost:3000/api/items/home`);
-      setEntries(data);
-    } catch (error) {
-      console.error('Error accessing protected route:', error);
-    }
-  }
-
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await fetchData();
+        setEntries(data);
+      } catch (error) {
+        console.log("Error in fetching data", error);
+      }
+    };
+    getData();
+  }, []);
+  
   return (
     <>
       <Contents setEntries={setEntries} entries={entries} fetchData={fetchData} />
